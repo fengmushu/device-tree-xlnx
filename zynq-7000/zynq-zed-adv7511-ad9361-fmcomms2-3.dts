@@ -6,24 +6,46 @@
 
 
 /dts-v1/;
-#include "zynq-7000.dtsi"
-#include "pl.dtsi"
+#include "zynq-zed.dtsi"
+#include "zynq-zed-adv7511.dtsi"
 #include "pcw.dtsi"
 / {
-	chosen {
-		bootargs = "earlycon";
-		stdout-path = "serial0:115200n8";
-	};
 	aliases {
 		ethernet0 = &gem0;
-		i2c0 = &axi_iic_fmc;
 		serial0 = &uart1;
-		spi0 = &qspi;
-		spi1 = &spi0;
-		spi2 = &spi1;
+		// i2c0 = &axi_iic_fmc;
+		// spi0 = &qspi;
+		// spi1 = &spi0;
+		// spi2 = &spi1;
 	};
-	memory@0 {
-		device_type = "memory";
-		reg = <0x0 0x20000000>;
-	};
+};
+
+&spi0 {
+	status = "okay";
+};
+
+&spi1 {
+	status = "okay";
+};
+
+#define fmc_spi spi0
+#define pmod_spi spi1
+
+#include "adi-fmcomms2.dtsi"
+#include "adi-fmcomms3-up-down-converter.dtsi"
+
+&adc0_ad9361 {
+	en_agc-gpios = <&gpio0 98 0>;
+	sync-gpios = <&gpio0 99 0>;
+	reset-gpios = <&gpio0 100 0>;
+	enable-gpios = <&gpio0 101 0>;
+	txnrx-gpios = <&gpio0 102 0>;
+};
+
+&lo_pll0_rx_adf4351 {
+	gpios = <&gpio0 103 0>;
+};
+
+&lo_pll0_tx_adf4351 {
+	gpios = <&gpio0 104 0>;
 };

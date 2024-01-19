@@ -2,8 +2,8 @@ VERSION ?= 2021.1
 XSCT ?= ~/workspace/xilinx/Vitis/$(VERSION)/bin/xsct
 BOARD ?= zynq-zed-adv7511-ad9361-fmcomms2-3
 
-XSA_FILE ?= '../openwifi-hw/boards/zed_fmcs2/openwifi_zed_fmcs2/system_top.xsa'
-DTSI_FILE ?= '../openwifi/adi-linux/arch/arm/boot/dts/zynq-zed-adv7511.dtsi'
+XSA_FILE ?= ../openwifi-hw/boards/zed_fmcs2/openwifi_zed_fmcs2/system_top.xsa
+DTSI_FILE ?= ../openwifi/adi-linux/arch/arm/boot/dts/zynq-zed-adv7511.dtsi
 
 dts:
 	# $(RM) -r zynq-7000
