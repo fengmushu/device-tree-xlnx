@@ -15,6 +15,22 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 		};
+
+		sdr: sdr {
+			compatible ="sdr,sdr";
+			dmas = <&openwifi_ip_axi_dma_1 1 &openwifi_ip_axi_dma_0 0>;
+			dma-names = "rx_dma_s2mm", "tx_dma_mm2s";
+			interrupt-names = "not_valid_anymore", "rx_pkt_intr", "tx_itrpt";
+			interrupt-parent = <1>;
+			interrupts = <0 29 1 0 30 1 0 33 1 0 34 1>;
+		};
+
+		axidmatest_1: axidmatest@1 {
+			compatible ="xlnx,axi-dma-test-1.00.a";
+			dmas = <&openwifi_ip_axi_dma_1 0 &openwifi_ip_axi_dma_0 1>;
+			dma-names = "axidma0", "axidma1";
+		};
+
 		openwifi_ip_axi_dma_0: dma@80400000 {
 			#dma-cells = <1>;
 			clock-names = "s_axi_lite_aclk", "m_axi_sg_aclk", "m_axi_mm2s_aclk", "m_axi_s2mm_aclk";
@@ -136,68 +152,11 @@
 			compatible = "fixed-clock";
 		};
 
-		// sdr: sdr {
-		// 	compatible ="sdr,sdr";
-		// 	dmas = <&rx_dma 1 &tx_dma 0>;
-		// 	dma-names = "rx_dma_s2mm", "tx_dma_mm2s";
-		// 	interrupt-names = "not_valid_anymore", "rx_pkt_intr", "tx_itrpt";
-		// 	interrupt-parent = <1>;
-		// 	interrupts = <0 29 1 0 30 1 0 33 1 0 34 1>;
-		// };
-
-		// axidmatest_1: axidmatest@1 {
-		// 	compatible ="xlnx,axi-dma-test-1.00.a";
-		// 	dmas = <&rx_dma 0 &rx_dma 1>;
-		// 	dma-names = "axidma0", "axidma1";
-		// };
-
-		// rx_dma: dma@7c400000 {
-		// 	compatible = "adi,axi-dmac-1.00.a";
-		// 	reg = <0x7c400000 0x10000>;
-		// 	#dma-cells = <1>;
-		// 	interrupts = <0 57 0>;
-		// 	clocks = <&clkc 16>;
-
-		// 	adi,channels {
-		// 		#size-cells = <0>;
-		// 		#address-cells = <1>;
-
-		// 		dma-channel@0 {
-		// 			reg = <0>;
-		// 			adi,source-bus-width = <64>;
-		// 			adi,source-bus-type = <2>;
-		// 			adi,destination-bus-width = <64>;
-		// 			adi,destination-bus-type = <0>;
-		// 		};
-		// 	};
-		// };
-
-		// tx_dma: dma@7c420000 {
-		// 	compatible = "adi,axi-dmac-1.00.a";
-		// 	reg = <0x7c420000 0x10000>;
-		// 	#dma-cells = <1>;
-		// 	interrupts = <0 56 0>;
-		// 	clocks = <&clkc 16>;
-
-		// 	adi,channels {
-		// 		#size-cells = <0>;
-		// 		#address-cells = <1>;
-
-		// 		dma-channel@0 {
-		// 			reg = <0>;
-		// 			adi,source-bus-width = <64>;
-		// 			adi,source-bus-type = <0>;
-		// 			adi,destination-bus-width = <64>;
-		// 			adi,destination-bus-type = <2>;
-		// 		};
-		// 	};
-		// };
-
 		cf_ad9361_adc_core_0: cf-ad9361-lpc@79020000 {
 			compatible = "adi,axi-ad9361-6.00.a";
 			reg = <0x79020000 0x6000>;
-			// dmas = <&rx_dma 0>;
-			// dma-names = "rx";
+			dmas = <&openwifi_ip_axi_dma_1 0>;
+			dma-names = "rx";
 
 			spibus-connected = <&adc0_ad9361>;
 		};
@@ -207,8 +166,8 @@
 			reg = <0x79024000 0x1000>;
 			clocks = <&adc0_ad9361 13>;
 			clock-names = "sampl_clk";
-			// dmas = <&tx_dma 0>;
-			// dma-names = "tx";
+			dmas = <&openwifi_ip_axi_dma_0 0>;
+			dma-names = "tx";
 		};
 	};
 
